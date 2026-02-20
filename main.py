@@ -14,7 +14,7 @@ from src.logger import init_log, print_summary
 
 def main():
     parser = argparse.ArgumentParser(description="CRM Case Follow-Up Email Automation")
-    parser.add_argument("--input", default="data/cases.csv", help="Path to cases CSV file")
+    parser.add_argument("--input", default="data/cases.csv", help="Path to cases file (.csv, .xlsx, .xls)")
     parser.add_argument("--send", action="store_true", help="Actually send emails (default: dry-run)")
     parser.add_argument("--owner", default=None, help="Send only to a specific owner email")
     args = parser.parse_args()

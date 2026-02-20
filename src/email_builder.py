@@ -14,7 +14,7 @@ DRAFTS_DIR = Path("output/drafts")
 TEMPLATE_FILE = "followup_email.html"
 
 MANAGER_NAME = os.getenv("MANAGER_NAME", "Abdo")
-MANAGER_EMAIL = os.getenv("MANAGER_EMAIL", "Akhoury@info-sys.com")
+MANAGER_EMAIL = os.getenv("MANAGER_EMAIL", "akhoury@info-sys.com")
 
 
 def build_drafts(owners: dict, filter_owner: str = None) -> dict:
@@ -34,7 +34,7 @@ def build_drafts(owners: dict, filter_owner: str = None) -> dict:
         if filter_owner and owner_email != filter_owner:
             continue
 
-        subject = f"Action Required: Follow-Up on Your Top Aged Cases – {today_str}"
+        subject = "Follow-up on Aged Open Cases"
 
         html_content = template.render(
             owner_name=data["owner_name"],

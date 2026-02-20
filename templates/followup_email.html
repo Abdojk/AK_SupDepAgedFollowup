@@ -4,89 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="margin:0; padding:0; font-family:Segoe UI, Arial, sans-serif; background:#f4f4f4;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4; padding:20px 0;">
-    <tr>
-      <td align="center">
-        <table width="640" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:6px; overflow:hidden;">
+<body style="font-family:Segoe UI, Arial, sans-serif; color:#222;">
+  <p>Dear {{ owner_name }},</p>
 
-          <!-- Header -->
-          <tr>
-            <td style="background:#1a3c6e; padding:20px 30px;">
-              <h1 style="margin:0; color:#ffffff; font-size:18px; font-weight:600;">
-                Action Required: Aged Case Follow-Up
-              </h1>
-              <p style="margin:6px 0 0; color:#a8c4e0; font-size:13px;">{{ today }}</p>
-            </td>
-          </tr>
+  <p>Please advise where the below cases are currently stuck and what I can do to help move them forward.</p>
 
-          <!-- Body -->
-          <tr>
-            <td style="padding:25px 30px;">
-              <p style="margin:0 0 15px; font-size:14px; color:#333;">
-                Hi {{ owner_name }},
-              </p>
-              <p style="margin:0 0 15px; font-size:14px; color:#333;">
-                You currently have <strong>{{ total_cases }} open case{{ "s" if total_cases != 1 }}</strong>.
-                Below are your <strong>top 3 oldest</strong> cases that need attention:
-              </p>
-
-              <!-- Cases Table -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-bottom:20px;">
-                <thead>
-                  <tr style="background:#eaf0f7;">
-                    <th style="padding:10px 12px; text-align:left; font-size:12px; color:#1a3c6e; border-bottom:2px solid #1a3c6e;">#</th>
-                    <th style="padding:10px 12px; text-align:left; font-size:12px; color:#1a3c6e; border-bottom:2px solid #1a3c6e;">Case Title</th>
-                    <th style="padding:10px 12px; text-align:center; font-size:12px; color:#1a3c6e; border-bottom:2px solid #1a3c6e;">Age (days)</th>
-                    <th style="padding:10px 12px; text-align:center; font-size:12px; color:#1a3c6e; border-bottom:2px solid #1a3c6e;">Priority</th>
-                    <th style="padding:10px 12px; text-align:left; font-size:12px; color:#1a3c6e; border-bottom:2px solid #1a3c6e;">Created</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for case in top3 %}
-                  <tr style="background:{{ '#ffffff' if loop.index is odd else '#f9fbfd' }};">
-                    <td style="padding:10px 12px; font-size:13px; color:#333; border-bottom:1px solid #e5e5e5;">{{ loop.index }}</td>
-                    <td style="padding:10px 12px; font-size:13px; color:#333; border-bottom:1px solid #e5e5e5;">{{ case.case_title }}</td>
-                    <td style="padding:10px 12px; font-size:13px; color:#c0392b; font-weight:600; text-align:center; border-bottom:1px solid #e5e5e5;">{{ case.age_days }}</td>
-                    <td style="padding:10px 12px; font-size:13px; text-align:center; border-bottom:1px solid #e5e5e5;">
-                      {% if case.priority == 'High' %}
-                        <span style="background:#e74c3c; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px;">High</span>
-                      {% elif case.priority == 'Normal' or case.priority == 'Medium' %}
-                        <span style="background:#f39c12; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px;">Normal</span>
-                      {% else %}
-                        <span style="background:#27ae60; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px;">Low</span>
-                      {% endif %}
-                    </td>
-                    <td style="padding:10px 12px; font-size:13px; color:#666; border-bottom:1px solid #e5e5e5;">{{ case.created_date }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-
-              <p style="margin:0 0 20px; font-size:14px; color:#333;">
-                Please review these cases and provide a status update where this is stuck otherwise if the case is already closed and confirmed by the customer, please close it on CRM.
-              </p>
-
-              <p style="margin:0; font-size:14px; color:#333;">
-                Best regards,<br>
-                <strong>{{ manager_name }}</strong><br>
-                <span style="color:#666; font-size:13px;">{{ manager_email }}</span>
-              </p>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="background:#f0f0f0; padding:15px 30px; text-align:center;">
-              <p style="margin:0; font-size:11px; color:#999;">
-                This is an automated follow-up generated by the CRM Case Follow-Up system.
-              </p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
+  <table cellpadding="6" cellspacing="0" border="1" style="border-collapse:collapse; border-color:#d0d0d0;">
+    <thead style="background:#f4f6f8;">
+      <tr>
+        <th align="left">Case ID</th>
+        <th align="left">Age</th>
+        <th align="left">Title</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for case in top3 %}
+      <tr>
+        <td>{{ case.case_id }}</td>
+        <td>{{ case.age_days }}</td>
+        <td>{{ case.case_title }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
+
+  <p>If the cases are already closed and confirmed, please ensure they are closed on the CRM.</p>
+
+  <p>Best regards,<br>
+  {{ manager_name }}</p>
 </body>
 </html>

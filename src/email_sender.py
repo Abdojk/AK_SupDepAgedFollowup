@@ -12,10 +12,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MANAGER_EMAIL = os.getenv("MANAGER_EMAIL", "")
+MANAGER_EMAIL = os.getenv("MANAGER_EMAIL", "akhoury@info-sys.com")
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.office365.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_USER = os.getenv("SMTP_USER", "akhoury@info-sys.com")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 
 # Graph API (optional)
@@ -63,7 +63,8 @@ def _send_via_smtp(to_email: str, to_name: str, subject: str, html: str):
     msg["Subject"] = subject
     msg["From"] = SMTP_USER
     # Both owner and manager are primary TO recipients
-    msg["To"] = f"{to_name} <{to_email}>, {MANAGER_EMAIL}"
+    msg["To"] = f"{to_name} <{to_email}>"
+    msg["Cc"] = MANAGER_EMAIL
 
     msg.attach(MIMEText(html, "html"))
 
@@ -85,6 +86,8 @@ def _send_via_graph(to_email: str, to_name: str, subject: str, html: str):
             "body": {"contentType": "HTML", "content": html},
             "toRecipients": [
                 {"emailAddress": {"address": to_email, "name": to_name}},
+            ],
+            "ccRecipients": [
                 {"emailAddress": {"address": MANAGER_EMAIL, "name": "Abdo"}},
             ],
         },

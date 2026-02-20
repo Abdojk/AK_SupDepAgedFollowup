@@ -3,14 +3,19 @@ parser.py — Load and validate the CRM cases input file.
 """
 
 import sys
-import pandas as pd
+from pathlib import Path
 from datetime import date
+
+import pandas as pd
 
 # Map normalised CRM-export column names → internal names
 COLUMN_MAP = {
     "(do_not_modify)_case": "case_id",
     "owner": "owner_name",
     "created_on": "created_date",
+    "case_title": "case_title",
+    "title": "case_title",
+    "age": "age_days",
 }
 
 # Owner name → email lookup (info-sys.com domain)
@@ -34,8 +39,12 @@ def load_and_validate(filepath: str) -> pd.DataFrame:
     """Load cases CSV, validate schema, calculate age in days."""
 
     # Load file
+    path = Path(filepath)
     try:
-        df = pd.read_csv(filepath)
+        if path.suffix.lower() in {".xlsx", ".xls"}:
+            df = pd.read_excel(filepath)
+        else:
+            df = pd.read_csv(filepath)
     except FileNotFoundError:
         print(f"\n[ERROR] File not found: {filepath}")
         print("  Place your cases export at data/cases.csv and retry.\n")
@@ -90,7 +99,7 @@ def load_and_validate(filepath: str) -> pd.DataFrame:
             print(f"  [WARN] {len(invalid_priority)} row(s) have invalid priority values — defaulting to 'Medium'.")
             df.loc[~df["priority"].isin(VALID_PRIORITIES), "priority"] = "Medium"
 
-    # Parse dates and calculate age
+    # Parse dates and calculate age if Age is missing from source
     try:
         df["created_date"] = pd.to_datetime(df["created_date"])
     except Exception as e:
@@ -98,8 +107,15 @@ def load_and_validate(filepath: str) -> pd.DataFrame:
         print("  Ensure dates are in a parseable date format.\n")
         sys.exit(1)
 
+    if "age_days" in df.columns:
+        df["age_days"] = pd.to_numeric(df["age_days"], errors="coerce")
+
     today = pd.Timestamp(date.today())
-    df["age_days"] = (today - df["created_date"]).dt.days
+    calculated_age = (today - df["created_date"]).dt.days
+    if "age_days" not in df.columns:
+        df["age_days"] = calculated_age
+    else:
+        df["age_days"] = df["age_days"].fillna(calculated_age)
 
     # Drop rows with missing critical fields
     before = len(df)
