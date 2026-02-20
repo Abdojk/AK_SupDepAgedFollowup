@@ -8,6 +8,7 @@ Automated follow-up email system for aged CRM support/development cases. Reads o
 - **Domain**: info-sys.com
 - **Email pattern**: FirstInitial+LastName@info-sys.com
 - **Manager cases**: Excluded from email sends (no self-email)
+- **Raji Aoun cases**: Excluded from email sends
 - **Email routing**: Every email goes TO: case owner AND TO: Akhoury@info-sys.com
 
 ## Owner Email Map
@@ -17,7 +18,6 @@ Automated follow-up email system for aged CRM support/development cases. Reads o
 | Georges Mouaikel | GMouaikel@info-sys.com |
 | Jana Sweid | JSweid@info-sys.com |
 | Mennatullah El Bahr | MElBahr@info-sys.com |
-| Raji Aoun | RAoun@info-sys.com |
 | Rebecca Estephan | REstephan@info-sys.com |
 
 ## Running

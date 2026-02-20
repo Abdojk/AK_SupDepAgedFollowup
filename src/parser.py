@@ -19,7 +19,6 @@ OWNER_EMAIL_MAP = {
     "Georges Mouaikel": "GMouaikel@info-sys.com",
     "Jana Sweid": "JSweid@info-sys.com",
     "Mennatullah El Bahr": "MElBahr@info-sys.com",
-    "Raji Aoun": "RAoun@info-sys.com",
     "Rebecca Estephan": "REstephan@info-sys.com",
 }
 
@@ -60,6 +59,12 @@ def load_and_validate(filepath: str) -> pd.DataFrame:
     if manager_count > 0:
         print(f"  Excluding {manager_count} case(s) owned by {MANAGER_OWNER_NAME} (manager).")
         df = df[df["owner_name"] != MANAGER_OWNER_NAME]
+
+    # Filter out Raji Aoun's cases
+    raji_count = (df["owner_name"] == "Raji Aoun").sum()
+    if raji_count > 0:
+        print(f"  Excluding {raji_count} case(s) owned by Raji Aoun.")
+        df = df[df["owner_name"] != "Raji Aoun"]
 
     # Warn about unmapped owners
     unmapped = df[df["owner_email"].isna()]["owner_name"].unique()
